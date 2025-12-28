@@ -1,0 +1,10 @@
+{
+	"name": "AzureKV",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kv20days.vault.azure.net/"
+		}
+	}
+}
