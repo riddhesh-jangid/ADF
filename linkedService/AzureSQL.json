@@ -1,0 +1,24 @@
+{
+	"name": "AzureSQL",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "sql-20days.database.windows.net",
+			"database": "free-sql-db-0334595",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "ServicePrincipal",
+			"servicePrincipalId": "61a0e616-2b65-40fe-9080-6e9a722605ae",
+			"servicePrincipalCredential": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKV",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "20daysdatabricksSP-clientSecret"
+			},
+			"tenant": "2275b063-9a12-4138-8e86-fc52581cbaec"
+		}
+	}
+}
