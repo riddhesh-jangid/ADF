@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "src_customer to landing",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -15,8 +15,54 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"enableStaging": false
-				}
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "src_customer_source",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "LandingSink",
+						"type": "DatasetReference",
+						"parameters": {
+							"directory": {
+								"value": "@concat(\n  'src_customer/',\n  formatDateTime(utcNow(), 'yyyy-MM-dd')\n)\n",
+								"type": "Expression"
+							},
+							"file_name": {
+								"value": "@concat(\n  'src_customer_',\n  formatDateTime(utcNow(), 'yyyyMMddHHmmss'),\n  '.csv'\n)\n",
+								"type": "Expression"
+							}
+						}
+					}
+				]
 			}
 		],
 		"annotations": []
