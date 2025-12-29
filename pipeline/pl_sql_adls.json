@@ -128,11 +128,11 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"directory": {
-								"value": "@concat(\n  'src_customer/',\n  formatDateTime(utcNow(), 'yyyy-MM-dd')\n)\n",
+								"value": "@concat(\n  'src_product/',\n  formatDateTime(utcNow(), 'yyyy-MM-dd')\n)\n",
 								"type": "Expression"
 							},
 							"file_name": {
-								"value": "@concat(\n  'src_customer_',\n  formatDateTime(utcNow(), 'yyyyMMddHHmmss'),\n  '.csv'\n)\n",
+								"value": "@concat(\n  'src_product_',\n  formatDateTime(utcNow(), 'yyyyMMddHHmmss'),\n  '.csv'\n)\n",
 								"type": "Expression"
 							}
 						}
