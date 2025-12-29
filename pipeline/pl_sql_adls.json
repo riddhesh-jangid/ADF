@@ -43,8 +43,83 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "src_customer_source",
-						"type": "DatasetReference"
+						"referenceName": "src_source",
+						"type": "DatasetReference",
+						"parameters": {
+							"table_name": "src_customer"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "LandingSink",
+						"type": "DatasetReference",
+						"parameters": {
+							"directory": {
+								"value": "@concat(\n  'src_customer/',\n  formatDateTime(utcNow(), 'yyyy-MM-dd')\n)\n",
+								"type": "Expression"
+							},
+							"file_name": {
+								"value": "@concat(\n  'src_customer_',\n  formatDateTime(utcNow(), 'yyyyMMddHHmmss'),\n  '.csv'\n)\n",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "src_product to landing_copy",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "src_customer to landing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "src_source",
+						"type": "DatasetReference",
+						"parameters": {
+							"table_name": "src_product"
+						}
 					}
 				],
 				"outputs": [
