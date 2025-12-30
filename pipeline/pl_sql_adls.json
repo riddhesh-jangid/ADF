@@ -150,7 +150,7 @@
 						{
 							"type": "NonQuery",
 							"text": {
-								"value": "@concat(\n    'UPDATE config.watermark SET watermark_ts = ( SELECT MAX(ingest_ts) FROM ',\n    pipeline().parameters.table_name,\n    ' ) WHERE table_name = ''',\n    pipeline().parameters.table_name,\n    ''''\n)",
+								"value": "@concat(\n    'UPDATE config.watermark SET watermark_ts = ( SELECT MAX(ingest_ts) FROM config.',\n    pipeline().parameters.table_name,\n    ' ) WHERE table_name = ''',\n    pipeline().parameters.table_name,\n    ''''\n)",
 								"type": "Expression"
 							}
 						}
