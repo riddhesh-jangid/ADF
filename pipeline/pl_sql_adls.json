@@ -3,76 +3,11 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "src_customer to landing",
-				"type": "Copy",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
-						}
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "src_source",
-						"type": "DatasetReference",
-						"parameters": {
-							"table_name": "src_customer"
-						}
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "LandingSink",
-						"type": "DatasetReference",
-						"parameters": {
-							"directory": {
-								"value": "@concat(\n  'src_customer/',\n  formatDateTime(utcNow(), 'yyyy-MM-dd')\n)\n",
-								"type": "Expression"
-							},
-							"file_name": {
-								"value": "@concat(\n  'src_customer_',\n  formatDateTime(utcNow(), 'yyyyMMddHHmmss'),\n  '.csv'\n)\n",
-								"type": "Expression"
-							}
-						}
-					}
-				]
-			},
-			{
-				"name": "src_product to landing_copy",
+				"name": "Source to landing",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "src_customer to landing",
+						"activity": "Get watermark",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -89,6 +24,23 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[config].[select_greater_than_watermark]",
+						"storedProcedureParameters": {
+							"table_name": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.table_name",
+									"type": "Expression"
+								}
+							},
+							"watermark_ts": {
+								"type": "DateTime",
+								"value": {
+									"value": "@activity('Get watermark').output.firstRow.watermark_ts",
+									"type": "Expression"
+								}
+							}
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -118,7 +70,7 @@
 						"referenceName": "src_source",
 						"type": "DatasetReference",
 						"parameters": {
-							"table_name": "src_product"
+							"table_name": "watermark"
 						}
 					}
 				],
@@ -128,18 +80,90 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"directory": {
-								"value": "@concat(\n  'src_product/',\n  formatDateTime(utcNow(), 'yyyy-MM-dd')\n)\n",
+								"value": "@concat(\n  pipeline().parameters.table_name,\n  '/',\n  formatDateTime(utcNow(), 'yyyy-MM-dd')\n)",
 								"type": "Expression"
 							},
 							"file_name": {
-								"value": "@concat(\n  'src_product_',\n  formatDateTime(utcNow(), 'yyyyMMddHHmmss'),\n  '.csv'\n)\n",
+								"value": "@concat(\n  pipeline().parameters.table_name,\n  '_',\n  formatDateTime(utcNow(), 'yyyyMMddHHmmss'),\n  '.csv'\n)",
 								"type": "Expression"
 							}
 						}
 					}
 				]
+			},
+			{
+				"name": "Get watermark",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "@concat(\n    'select watermark_ts from config.watermark  where table_name = ''',\n    pipeline().parameters.table_name,\n    ''''\n)",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "src_source",
+						"type": "DatasetReference",
+						"parameters": {
+							"table_name": "watermark"
+						}
+					}
+				}
+			},
+			{
+				"name": "Update latest watername",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Source to landing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "AzureSQL",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "NonQuery",
+							"text": {
+								"value": "@concat(\n    'UPDATE config.watermark SET watermark_ts = ( SELECT MAX(ingest_ts) FROM ',\n    pipeline().parameters.table_name,\n    ' ) WHERE table_name = ''',\n    pipeline().parameters.table_name,\n    ''''\n)",
+								"type": "Expression"
+							}
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
 			}
 		],
+		"parameters": {
+			"table_name": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
