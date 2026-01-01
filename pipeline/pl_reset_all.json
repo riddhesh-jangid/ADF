@@ -23,8 +23,8 @@
 				}
 			},
 			{
-				"name": "Delete All Files",
-				"type": "Delete",
+				"name": "List folders",
+				"type": "GetMetadata",
 				"dependsOn": [
 					{
 						"activity": "call reset_all",
@@ -46,26 +46,90 @@
 						"referenceName": "LandingSink",
 						"type": "DatasetReference",
 						"parameters": {
-							"directory": "src_*",
-							"file_name": "*"
+							"directory": "@''",
+							"file_name": "@''"
 						}
 					},
-					"logStorageSettings": {
-						"linkedServiceName": {
-							"referenceName": "LandingLS",
-							"type": "LinkedServiceReference"
-						},
-						"path": "landingfiles/_logging"
-					},
-					"enableLogging": true,
+					"fieldList": [
+						"itemName",
+						"childItems"
+					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
-						"recursive": true,
 						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
 					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "List folders",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('List folders').output.childItems",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Delete1",
+							"type": "Delete",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "LandingSink",
+									"type": "DatasetReference",
+									"parameters": {
+										"directory": {
+											"value": "@item().name",
+											"type": "Expression"
+										},
+										"file_name": "@''"
+									}
+								},
+								"logStorageSettings": {
+									"linkedServiceName": {
+										"referenceName": "LandingLS",
+										"type": "LinkedServiceReference"
+									},
+									"path": "landingfiles/_logging"
+								},
+								"enableLogging": true,
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								}
+							}
+						}
+					]
 				}
 			}
 		],
+		"variables": {
+			"temp": {
+				"type": "Array"
+			}
+		},
 		"annotations": []
 	}
 }
