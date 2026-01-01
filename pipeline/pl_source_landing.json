@@ -5,7 +5,14 @@
 			{
 				"name": "Run Tables",
 				"type": "ForEach",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Generate Files",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
@@ -37,6 +44,26 @@
 							}
 						}
 					]
+				}
+			},
+			{
+				"name": "Generate Files",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/riddhesh710@gmail.com/riddhesh710@gmail.com/__generator/Generator"
+				},
+				"linkedServiceName": {
+					"referenceName": "20DaysDBXIC",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
