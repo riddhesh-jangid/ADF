@@ -59,7 +59,12 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/riddhesh710@gmail.com/riddhesh710@gmail.com/__generator/Generator"
+					"notebookPath": "/Users/riddhesh710@gmail.com/riddhesh710@gmail.com/__generator/Generator",
+					"baseParameters": {
+						"no_of_customer": "20",
+						"no_of_product": "10",
+						"no_of_purchase": "50"
+					}
 				},
 				"linkedServiceName": {
 					"referenceName": "20DaysDBXIC",
