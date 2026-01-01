@@ -1,0 +1,19 @@
+{
+	"name": "20DaysDBXIC",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-7405616081064700.0.azuredatabricks.net",
+			"accessToken": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKV",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "20DaysDBXToken"
+			},
+			"existingClusterId": "1230-144533-8oh8vgd7"
+		}
+	}
+}
