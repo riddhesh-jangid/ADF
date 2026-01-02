@@ -163,7 +163,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"directory": {
-											"value": "@concat(\n  pipeline().parameters.table_name,\n  '/',\n  formatDateTime(utcNow(), 'yyyy-MM-dd')\n)",
+											"value": "@concat(\n  pipeline().parameters.table_name,\n  '/run_date=',\n  formatDateTime(utcNow(), 'yyyy-MM-dd')\n)",
 											"type": "Expression"
 										},
 										"file_name": {
