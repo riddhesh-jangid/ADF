@@ -1,5 +1,5 @@
 {
-	"name": "bronze_ingestion",
+	"name": "ch_landing_bronze",
 	"properties": {
 		"activities": [
 			{

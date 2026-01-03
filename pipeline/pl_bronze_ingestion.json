@@ -1,0 +1,62 @@
+{
+	"name": "pl_bronze_ingestion",
+	"properties": {
+		"activities": [
+			{
+				"name": "Ingest Table",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.bronze_tables",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Ingest Bronze",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"policy": {
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "ch_landing_bronze",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"table_name": {
+										"value": "@item()",
+										"type": "Expression"
+									},
+									"run_date_values": {
+										"value": "@pipeline().parameters.run_date",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"bronze_tables": {
+				"type": "array",
+				"defaultValue": "['src_customer','src_product']"
+			},
+			"run_date": {
+				"type": "string",
+				"defaultValue": "'2026-01-02','2026-01-03'"
+			}
+		},
+		"folder": {
+			"name": "Ingestion"
+		},
+		"annotations": []
+	}
+}
