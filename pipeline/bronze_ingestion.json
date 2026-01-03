@@ -1,0 +1,49 @@
+{
+	"name": "bronze_ingestion",
+	"properties": {
+		"activities": [
+			{
+				"name": "bronze_notebook",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/riddhesh710@gmail.com/01_bronze/nb_bronze_ingestion",
+					"baseParameters": {
+						"table_name": {
+							"value": "@pipeline().parameters.table_name",
+							"type": "Expression"
+						},
+						"run_date_values": {
+							"value": "@pipeline().parameters.run_date_values",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "20DaysDBXIC",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"table_name": {
+				"type": "string"
+			},
+			"run_date_values": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Ingestion"
+		},
+		"annotations": []
+	}
+}
