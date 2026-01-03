@@ -47,7 +47,10 @@
 		"parameters": {
 			"bronze_tables": {
 				"type": "array",
-				"defaultValue": "['src_customer','src_product']"
+				"defaultValue": [
+					"src_customer",
+					"src_product"
+				]
 			},
 			"run_date": {
 				"type": "string",
