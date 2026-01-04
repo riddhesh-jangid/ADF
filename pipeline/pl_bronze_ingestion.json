@@ -58,7 +58,7 @@
 			},
 			"run_date": {
 				"type": "string",
-				"defaultValue": "2026-01-02,2026-01-03"
+				"defaultValue": "2026-01-04"
 			}
 		},
 		"folder": {
