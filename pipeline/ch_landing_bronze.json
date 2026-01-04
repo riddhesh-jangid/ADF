@@ -15,7 +15,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/riddhesh710@gmail.com/01_bronze/nb_bronze_ingestion",
+					"notebookPath": "/DataEngineering/01_bronze/nb_bronze_ingestion",
 					"baseParameters": {
 						"table_name": {
 							"value": "@pipeline().parameters.table_name",
