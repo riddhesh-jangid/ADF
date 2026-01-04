@@ -49,7 +49,11 @@
 				"type": "array",
 				"defaultValue": [
 					"src_customer",
-					"src_product"
+					"src_product",
+					"src_orders",
+					"src_order_items",
+					"src_payments",
+					"src_shipments"
 				]
 			},
 			"run_date": {
