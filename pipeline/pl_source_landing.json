@@ -59,7 +59,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/riddhesh710@gmail.com/riddhesh710@gmail.com/__generator/Generator",
+					"notebookPath": "/DataEngineering/__generator/Generator",
 					"baseParameters": {
 						"no_of_customer": "20",
 						"no_of_product": "10",
