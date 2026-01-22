@@ -1,5 +1,5 @@
 {
-	"name": "pl_bronze_ingestion",
+	"name": "pl_ingestion",
 	"properties": {
 		"activities": [
 			{
@@ -41,6 +41,225 @@
 							}
 						}
 					]
+				}
+			},
+			{
+				"name": "Customer Silver Processing",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Ingest Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/DataEngineering/02_silver/customer_silver_ingestion"
+				},
+				"linkedServiceName": {
+					"referenceName": "20DaysDBXIC",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Product Silver Processing",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Ingest Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/DataEngineering/02_silver/product_silver_ingestion"
+				},
+				"linkedServiceName": {
+					"referenceName": "20DaysDBXIC",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Orders Silver Processing",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Ingest Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/DataEngineering/02_silver/orders_silver_ingestion"
+				},
+				"linkedServiceName": {
+					"referenceName": "20DaysDBXIC",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Order Items Silver Processing",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Ingest Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/DataEngineering/02_silver/order_items_silver_ingestion"
+				},
+				"linkedServiceName": {
+					"referenceName": "20DaysDBXIC",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Payments Silver Processing",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Ingest Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/DataEngineering/02_silver/payments_silver_ingestion"
+				},
+				"linkedServiceName": {
+					"referenceName": "20DaysDBXIC",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Shipments Silver Processing",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Ingest Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/DataEngineering/02_silver/shipments_silver_ingestion"
+				},
+				"linkedServiceName": {
+					"referenceName": "20DaysDBXIC",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Fact Order Lifecycle Gold Processing",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Customer Silver Processing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Product Silver Processing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Orders Silver Processing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Order Items Silver Processing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Payments Silver Processing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Shipments Silver Processing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/DataEngineering/03_gold/fact_order_lifecycle"
+				},
+				"linkedServiceName": {
+					"referenceName": "20DaysDBXIC",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
