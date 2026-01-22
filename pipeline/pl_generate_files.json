@@ -61,9 +61,9 @@
 				"typeProperties": {
 					"notebookPath": "/DataEngineering/__generator/Generator",
 					"baseParameters": {
-						"no_of_customer": "20",
-						"no_of_product": "10",
-						"no_of_purchase": "50"
+						"no_of_customer": "12",
+						"no_of_product": "3",
+						"no_of_purchase": "80"
 					}
 				},
 				"linkedServiceName": {
