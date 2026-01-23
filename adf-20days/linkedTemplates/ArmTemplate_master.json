@@ -1,0 +1,98 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-20days"
+		},
+		"LandingLS_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LandingLS'"
+		},
+		"20DaysDBXIC_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0113-165918-6cut0ivv"
+		},
+		"AzureKV_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kv20days.vault.azure.net/"
+		},
+		"AzureSQL_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sql-20days.database.windows.net"
+		},
+		"AzureSQL_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "free-sql-db-0334595"
+		},
+		"AzureSQL_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "61a0e616-2b65-40fe-9080-6e9a722605ae"
+		},
+		"AzureSQL_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "2275b063-9a12-4138-8e86-fc52581cbaec"
+		},
+		"LandingLS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://stgsourceadls.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adf-20days_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LandingLS_accountKey": {
+						"value": "[parameters('LandingLS_accountKey')]"
+					},
+					"AzureKV_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKV_properties_typeProperties_baseUrl')]"
+					},
+					"LandingLS_properties_typeProperties_url": {
+						"value": "[parameters('LandingLS_properties_typeProperties_url')]"
+					},
+					"20DaysDBXIC_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('20DaysDBXIC_properties_typeProperties_existingClusterId')]"
+					},
+					"AzureSQL_properties_typeProperties_server": {
+						"value": "[parameters('AzureSQL_properties_typeProperties_server')]"
+					},
+					"AzureSQL_properties_typeProperties_database": {
+						"value": "[parameters('AzureSQL_properties_typeProperties_database')]"
+					},
+					"AzureSQL_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('AzureSQL_properties_typeProperties_servicePrincipalId')]"
+					},
+					"AzureSQL_properties_typeProperties_tenant": {
+						"value": "[parameters('AzureSQL_properties_typeProperties_tenant')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

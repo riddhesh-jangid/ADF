@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-20days"
+		},
+		"LandingLS_accountKey": {
+			"value": ""
+		},
+		"20DaysDBXIC_properties_typeProperties_existingClusterId": {
+			"value": "0113-165918-6cut0ivv"
+		},
+		"AzureKV_properties_typeProperties_baseUrl": {
+			"value": "https://kv20days.vault.azure.net/"
+		},
+		"AzureSQL_properties_typeProperties_server": {
+			"value": "sql-20days.database.windows.net"
+		},
+		"AzureSQL_properties_typeProperties_database": {
+			"value": "free-sql-db-0334595"
+		},
+		"AzureSQL_properties_typeProperties_servicePrincipalId": {
+			"value": "61a0e616-2b65-40fe-9080-6e9a722605ae"
+		},
+		"AzureSQL_properties_typeProperties_tenant": {
+			"value": "2275b063-9a12-4138-8e86-fc52581cbaec"
+		},
+		"LandingLS_properties_typeProperties_url": {
+			"value": "https://stgsourceadls.dfs.core.windows.net/"
+		}
+	}
+}
